@@ -6,99 +6,27 @@
     <title>Pour Chmicha ☀️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --rose-light: #ffafbd;
-            --rose-dark: #ffc3a0;
-            --fuchsia: #ff007f;
-            --fuchsia-dark: #b30059;
-            --fuchsia-light: #ff4da6;
-        }
+        :root { --rose-light: #ffafbd; --rose-dark: #ffc3a0; --fuchsia: #ff007f; --fuchsia-dark: #b30059; --fuchsia-light: #ff4da6; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            height: 100vh; width: 100vw; overflow: hidden; 
-            background: linear-gradient(45deg, var(--rose-light), var(--rose-dark));
-            font-family: 'Arial Rounded MT Bold', sans-serif;
-            color: white;
-        }
-
-        .heart-bg {
-            position: absolute; font-size: 20px; opacity: 0.5;
-            z-index: 1; pointer-events: none;
-            animation: floatAnim 6s linear infinite;
-        }
-        @keyframes floatAnim {
-            0% { transform: translateY(110vh); opacity: 0; }
-            50% { opacity: 0.7; }
-            100% { transform: translateY(-10vh); opacity: 0; }
-        }
-
-        .page { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; padding: 20px;
-            z-index: 10; opacity: 0; visibility: hidden;
-            transform: translateY(30px); 
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
+        body { height: 100vh; width: 100vw; overflow: hidden; background: linear-gradient(45deg, var(--rose-light), var(--rose-dark)); font-family: 'Arial Rounded MT Bold', sans-serif; color: white; }
+        .heart-bg { position: absolute; font-size: 20px; opacity: 0.5; z-index: 1; pointer-events: none; animation: floatAnim 6s linear infinite; }
+        @keyframes floatAnim { 0% { transform: translateY(110vh); opacity: 0; } 50% { opacity: 0.7; } 100% { transform: translateY(-10vh); opacity: 0; } }
+        .page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; z-index: 10; opacity: 0; visibility: hidden; transform: translateY(30px); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .page.active { opacity: 1; visibility: visible; transform: translateY(0); }
         .page.exit { opacity: 0; transform: translateY(-100vh) scale(0.9); }
-
-        .big-title { 
-            font-size: clamp(1.5rem, 7vw, 2.5rem); 
-            text-align: center; font-weight: 900;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .btn-pink {
-            background: linear-gradient(135deg, var(--fuchsia), var(--fuchsia-light));
-            color: white; border: none;
-            padding: 15px 35px; font-size: 1.2rem;
-            border-radius: 50px; font-weight: bold;
-            box-shadow: 0 6px 0 var(--fuchsia-dark);
-            cursor: pointer; transition: 0.2s;
-            z-index: 100;
-        }
+        .big-title { font-size: clamp(1.5rem, 7vw, 2.5rem); text-align: center; font-weight: 900; text-shadow: 2px 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .btn-pink { background: linear-gradient(135deg, var(--fuchsia), var(--fuchsia-light)); color: white; border: none; padding: 15px 35px; font-size: 1.2rem; border-radius: 50px; font-weight: bold; box-shadow: 0 6px 0 var(--fuchsia-dark); cursor: pointer; transition: 0.2s; }
         .btn-pink:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--fuchsia-dark); }
-
-        /* Style spécifique pour le bouton NON */
-        #no-btn {
-            position: relative;
-            background: #888;
-            box-shadow: 0 6px 0 #444;
-        }
-
-        .quiz-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; width: 100%; max-width: 280px;
-        }
-
-        .num-btn {
-            background: linear-gradient(135deg, var(--fuchsia), var(--fuchsia-light));
-            border: none; color: white; padding: 12px; font-size: 1.1rem;
-            border-radius: 12px; box-shadow: 0 4px 0 var(--fuchsia-dark);
-        }
-
-        .bear-img {
-            width: 200px; margin-bottom: 20px; border-radius: 20px;
-        }
-
-        .btn-gold { background: linear-gradient(135deg, #ffd700, #ffae00); color: #333; box-shadow: 0 6px 0 #b89b00; }
+        #no-btn { position: relative; background: #888; box-shadow: 0 6px 0 #444; }
+        .quiz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 280px; }
+        .num-btn { background: linear-gradient(135deg, var(--fuchsia), var(--fuchsia-light)); border: none; color: white; padding: 12px; font-size: 1.1rem; border-radius: 12px; box-shadow: 0 4px 0 var(--fuchsia-dark); }
+        .bear-img { width: 180px; margin-bottom: 15px; border-radius: 20px; }
+        textarea { width: 100%; max-width: 300px; height: 100px; border-radius: 15px; border: none; padding: 12px; font-family: inherit; margin-bottom: 15px; outline: none; }
     </style>
 </head>
 <body>
-
 <script>
-    setInterval(()=>{
-        const h = document.createElement('div');
-        h.className = 'heart-bg'; h.innerHTML = '❤️';
-        h.style.left = Math.random() * 95 + 'vw';
-        h.style.animationDuration = (Math.random() * 2 + 4) + 's';
-        document.body.appendChild(h);
-        setTimeout(()=>h.remove(), 6000);
-    }, 600);
+    setInterval(()=>{ const h = document.createElement('div'); h.className = 'heart-bg'; h.innerHTML = '❤️'; h.style.left = Math.random() * 95 + 'vw'; h.style.animationDuration = (Math.random() * 2 + 4) + 's'; document.body.appendChild(h); setTimeout(()=>h.remove(), 6000); }, 600);
 </script>
 
 <div id="p1" class="page active">
@@ -115,71 +43,48 @@
 </div>
 
 <div id="p3" class="page">
-    <img src="https://media.tenor.com/j7_p4S7S7YAAAAAM/milk-and-mocha-bear-couple.gif" class="bear-img" alt="Oursons">
+    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/9G0AdBbVrk_3PCYfbt/giphy.gif" class="bear-img" alt="Oursons">
     <h1 class="big-title" style="font-size: 1.5rem;">weeee 7ta ana ou bzf 🥰</h1>
     <button class="btn-pink" onclick="changePage(3, 4)">Suivant ✨</button>
 </div>
 
 <div id="p4" class="page">
+    <h1 class="big-title" style="font-size: 1.5rem;">Khwi 9lbk hna... ❤️</h1>
+    <textarea id="user-text" placeholder="Katbi ay 7aja bghiti..."></textarea>
+    <button class="btn-pink" onclick="changePage(4, 5)">Suivant 💌</button>
+</div>
+
+<div id="p5" class="page">
     <h2 class="big-title" style="font-size: 1.5rem;">ch7al katbghini mn 10💖</h2>
     <div class="quiz-grid" id="grid"></div>
 </div>
 
-<div id="p5" class="page">
+<div id="p6" class="page">
     <h1 id="txt" class="big-title"></h1>
-    <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-        <button class="btn-pink" onclick="changePage(5, 4)">Retour</button>
-        <button id="next" class="btn-pink btn-gold" onclick="alert('Tu es mon bonheur ! ❤️')">Finir ✨</button>
-    </div>
+    <button class="btn-pink" onclick="changePage(6, 5)">Retour</button>
 </div>
 
 <script>
-    // Remplir le quiz
     const grid = document.getElementById('grid');
     for(let i=1; i<=10; i++) {
-        const b = document.createElement('button');
-        b.className = 'num-btn'; b.innerHTML = i;
-        b.onclick = () => showRes(i);
-        grid.appendChild(b);
+        const b = document.createElement('button'); b.className = 'num-btn'; b.innerHTML = i; b.onclick = () => showRes(i); grid.appendChild(b);
     }
-
-    // Fonction pour faire fuir le bouton NON
-    function moveNo() {
-        const btn = document.getElementById('no-btn');
-        // On change le bouton en "absolute" pour qu'il puisse bouger partout
-        btn.style.position = 'absolute';
-        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-        btn.style.left = x + 'px';
-        btn.style.top = y + 'px';
-    }
-
+    function moveNo() { const btn = document.getElementById('no-btn'); btn.style.position = 'absolute'; btn.style.left = Math.random() * (window.innerWidth - 100) + 'px'; btn.style.top = Math.random() * (window.innerHeight - 50) + 'px'; }
     function changePage(current, next) {
-        const currEl = document.getElementById('p' + current);
-        const nextEl = document.getElementById('p' + next);
-        currEl.classList.add('exit');
-        currEl.classList.remove('active');
-        setTimeout(() => {
-            nextEl.classList.add('active');
-            setTimeout(() => { currEl.classList.remove('exit'); }, 800);
+        document.getElementById('p' + current).classList.add('exit');
+        document.getElementById('p' + current).classList.remove('active');
+        setTimeout(() => { 
+            const nextEl = document.getElementById('p' + next);
+            nextEl.classList.add('active'); 
+            nextEl.classList.remove('exit');
         }, 100);
     }
-
     function showRes(s) {
         const t = document.getElementById('txt');
-        const n = document.getElementById('next');
-        if(s < 5) {
-            t.innerHTML = "Mt2kda?? 😥";
-            n.style.display = "none";
-        } else if(s <= 8) {
-            t.innerHTML = "ma3likch ana <br> kanbghik 10 😘";
-            n.style.display = "block";
-        } else {
-            t.innerHTML = "aw~ 7biba dyali <br> ana kanbghik 10 🥰";
-            n.style.display = "block";
-            confetti({particleCount: 150, spread: 70, origin: {y: 0.6}});
-        }
-        changePage(4, 5);
+        if(s < 5) t.innerHTML = "Mt2kda?? 😥";
+        else if(s <= 8) t.innerHTML = "ma3likch ana <br> kanbghik 10 😘";
+        else { t.innerHTML = "aw~ 7biba dyali <br> ana kanbghik 10 🥰"; confetti({particleCount: 150, spread: 70, origin: {y: 0.6}}); }
+        changePage(5, 6);
     }
 </script>
 </body>
