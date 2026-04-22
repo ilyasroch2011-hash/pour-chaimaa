@@ -20,25 +20,44 @@
         #no-btn { position: relative; background: #888; box-shadow: 0 6px 0 #444; }
         .quiz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 280px; }
         .num-btn { background: linear-gradient(135deg, var(--fuchsia), var(--fuchsia-light)); border: none; color: white; padding: 12px; font-size: 1.1rem; border-radius: 12px; box-shadow: 0 4px 0 var(--fuchsia-dark); cursor: pointer; }
-        .bear-img { width: 180px; margin-bottom: 15px; border-radius: 20px; }
         textarea { width: 100%; max-width: 300px; height: 120px; border-radius: 15px; border: none; padding: 15px; font-family: inherit; margin-bottom: 15px; outline: none; color: #333; }
     </style>
 </head>
 <body>
+
+<audio id="bgMusic" loop>
+    <source src="https://www.chosic.com/wp-content/uploads/2021/04/Lofi-Study-Music.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+    // Animation des cœurs
     setInterval(()=>{ const h = document.createElement('div'); h.className = 'heart-bg'; h.innerHTML = '❤️'; h.style.left = Math.random() * 95 + 'vw'; h.style.animationDuration = (Math.random() * 2 + 4) + 's'; document.body.appendChild(h); setTimeout(()=>h.remove(), 6000); }, 600);
+
+    // Fonction pour le son de Pop (Adopt Me style)
+    function playPop() {
+        const pop = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+        pop.volume = 0.4;
+        pop.play();
+    }
+
+    // Gestion de la musique
+    function startMusic() {
+        const music = document.getElementById("bgMusic");
+        music.volume = 0.3;
+        music.play();
+    }
 </script>
 
 <div id="p1" class="page active">
     <h1 class="big-title">Mr7ba bik <br> chmicha dyali 😍</h1>
-    <button class="btn-pink" onclick="changePage(1, 2)">brki hna !!</button>
+    <button class="btn-pink" onclick="playPop(); startMusic(); changePage(1, 2)">brki hna !!</button>
 </div>
 
 <div id="p2" class="page">
     <h1 class="big-title">wach katbghini ??? 🥺</h1>
     <div style="display: flex; gap: 20px;">
-        <button class="btn-pink" onclick="changePage(2, 3)">Ouiii ✅</button>
-        <button id="no-btn" class="btn-pink" onclick="moveNo()">Non ❌</button>
+        <button class="btn-pink" onclick="playPop(); changePage(2, 3)">Ouiii ✅</button>
+        <button id="no-btn" class="btn-pink" onclick="playPop(); moveNo()">Non ❌</button>
     </div>
 </div>
 
@@ -49,8 +68,9 @@
              alt="Oursons" 
              style="width:200px; height:180px; border-radius: 15px; display: block; object-fit: contain;">
     </div>
-    <button class="btn-pink" style="margin-top: 20px;" onclick="changePage(3,4)">Suivant ✨</button>
+    <button class="btn-pink" style="margin-top: 20px;" onclick="playPop(); changePage(3,4)">Suivant ✨</button>
 </div>
+
 <div id="p4" class="page">
     <h2 class="big-title" style="font-size: 1.5rem;">ch7al katbghini mn 10💖</h2>
     <div class="quiz-grid" id="grid"></div>
@@ -59,8 +79,8 @@
 <div id="p5" class="page">
     <h1 id="txt" class="big-title"></h1>
     <div style="display: flex; gap: 10px;">
-        <button class="btn-pink" style="background: #999; box-shadow: 0 6px 0 #666;" onclick="changePage(5, 4)">Retour</button>
-        <button id="next-to-letter" class="btn-pink" onclick="changePage(5, 6)">Continuer... ✨</button>
+        <button class="btn-pink" style="background: #999; box-shadow: 0 6px 0 #666;" onclick="playPop(); changePage(5, 4)">Retour</button>
+        <button id="next-to-letter" class="btn-pink" onclick="playPop(); changePage(5, 6)">Continuer... ✨</button>
     </div>
 </div>
 
@@ -68,16 +88,25 @@
     <h1 class="big-title" style="font-size: 1.5rem;">Khwi 9lbk hna... ❤️</h1>
     <p style="margin-bottom: 10px; font-size: 0.8rem; text-align: center;">Gouli li ay 7aja f9lbk ou ay <br> amelioration bghitiha fia...</p>
     <textarea id="user-text" placeholder="Katbi hna..."></textarea>
-    <button class="btn-pink" onclick="finish()">Finir 💌</button>
+    <button class="btn-pink" onclick="playPop(); finish()">Finir 💌</button>
 </div>
 
 <script>
     const grid = document.getElementById('grid');
     for(let i=1; i<=10; i++) {
-        const b = document.createElement('button'); b.className = 'num-btn'; b.innerHTML = i; b.onclick = () => showRes(i); grid.appendChild(b);
+        const b = document.createElement('button'); 
+        b.className = 'num-btn'; 
+        b.innerHTML = i; 
+        b.onclick = () => { playPop(); showRes(i); }; 
+        grid.appendChild(b);
     }
 
-    function moveNo() { const btn = document.getElementById('no-btn'); btn.style.position = 'absolute'; btn.style.left = Math.random() * (window.innerWidth - 100) + 'px'; btn.style.top = Math.random() * (window.innerHeight - 50) + 'px'; }
+    function moveNo() { 
+        const btn = document.getElementById('no-btn'); 
+        btn.style.position = 'absolute'; 
+        btn.style.left = Math.random() * (window.innerWidth - 100) + 'px'; 
+        btn.style.top = Math.random() * (window.innerHeight - 50) + 'px'; 
+    }
     
     function changePage(current, next) {
         document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.classList.remove('exit'); });
@@ -104,7 +133,6 @@
 
     function finish() {
         alert("Tu es mon bonheur ! ❤️");
-        // Tu peux ajouter une redirection ici si tu veux
     }
 </script>
 </body>
